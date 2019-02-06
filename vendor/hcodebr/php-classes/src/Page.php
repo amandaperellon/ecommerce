@@ -12,12 +12,12 @@ class Page {
 		"data"=>[]
 	];
 
-	public function __construct($opts = array()){
+	public function __construct($opts = array(), $tpl_dir = "/curso1/ECommerce/views/"){
 
 		$this->options = array_merge($this->defaults, $opts);  //o 2 parametro (opts) sempre irá sobreescrever o 1 (defaults) quando houver conflito, quando isso não ocorrer, o metodo mesclara os arrays
 
 		$config = array(
-			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"] . "/curso1/ECommerce/views/",
+			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"] . $tpl_dir,
 			"cache_dir"     => $_SERVER["DOCUMENT_ROOT"] . "/curso1/ECommerce/views-cache/",
 			"debug"         => false // set to false to improve the speed
 		);
