@@ -67,10 +67,59 @@ $app->get('/cart', function() {
 
 	$page = new Page();
 
-	$page->setTpl("cart");
+	$page->setTpl("cart", [
+		'cart' => $cart->getValues(),
+		'products'=>$cart->getProducts()
+
+	]);
 }); 
 
 
+$app->get('/cart/:idproduct/add', function($idproduct) {
 
+	$product = new Products();
+
+	$product->get((int)$idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$qtd = (isset($_GET['qtd'])) ? (int)$_GET['qtd'] : 1;
+
+	for ($i=0; $i < $qtd; $i++) { 
+		
+		$cart->addProduct($product);
+	}
+
+	header("Location: /curso1/ECommerce/index.php/cart");
+	exit;
+}); 
+
+$app->get('/cart/:idproduct/minus', function($idproduct) {  //irá apagar só um
+
+	$product = new Products();
+
+	$product->get((int)$idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$cart->removeProduct($product);
+
+	header("Location: /curso1/ECommerce/index.php/cart");
+	exit;
+}); 
+
+$app->get('/cart/:idproduct/remove', function($idproduct) { //irá remover todos
+
+	$product = new Products();
+
+	$product->get((int)$idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$cart->removeProduct($product, true);
+
+	header("Location: /curso1/ECommerce/index.php/cart");
+	exit;
+}); 
 
 ?>
