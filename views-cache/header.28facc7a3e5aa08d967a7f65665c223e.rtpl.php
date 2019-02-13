@@ -43,7 +43,15 @@
                             <li><a href="#"><i class="fa fa-user"></i> Minha Conta</a></li>
                             <li><a href="#"><i class="fa fa-heart"></i> Lista de Desejos</a></li>
                             <li><a href="/curso1/ECommerce/index.php/cart"><i class="fa fa-shopping-cart"></i> Meu Carrinho</a></li>
-                            <li><a href="#"><i class="fa fa-lock"></i> Login</a></li>
+                            <?php if( checkLogin(false) ){ ?>
+
+                            <li><a href="/curso1/ECommerce/index.php/profile"><i class="fa fa-user"></i> <?php echo getUserName(); ?> </a></li>
+                            <li><a href="/curso1/ECommerce/index.php/logout"><i class="fa fa-close"></i>Sair</a></li>
+                            <?php }else{ ?>
+
+                            <li><a href="/curso1/ECommerce/index.php/login"><i class="fa fa-lock"></i> Login</a></li>
+                            <?php } ?>
+
                         </ul>
                     </div>
                 </div>
@@ -105,7 +113,7 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
+                        <li class="active"><a href="/curso1/ECommerce/index.php/">Home</a></li>
                         <li><a href="#">Produtos</a></li>
                         <li><a href="/curso1/ECommerce/index.php/cart">Carrinho</a></li>
                     </ul>
