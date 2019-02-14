@@ -297,4 +297,65 @@ $app->post('/forgot/reset', function(){
 	
 });
 
+$app->get("/profile", function(){
+
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("profile", [
+		'user'=>$user->getValues(),
+		'profileMsg'=>User::getSuccess(),
+		'profileError'=>User::getError()
+	]);
+
+});
+
+$app->post("/profile", function(){
+
+	User::verifyLogin(false);
+
+	if(!isset($_POST['desperson']) || $_POST['desperson'] === ''){
+
+		User::setError("Preencha o seu nome");
+		header('Location: /curso1/ECommerce/index.php/profile');
+		exit;
+	}
+
+	if(!isset($_POST['desemail']) || $_POST['desemail'] === ''){
+
+		User::setError("Preencha o seu email");
+		header('Location: /curso1/ECommerce/index.php/profile');
+		exit;
+	}
+
+	$user = User::getFromSession();
+
+	if($_POST['desemail'] !== $user->getdesemail()){
+
+		if(User::checkLoginExist($_POST['email']) === true){
+
+			User::setErrorRegister("Este endereço de email já está sendo usado por outro usuário");
+			header('Location: /curso1/ECommerce/index.php/profile');
+			exit;
+		}
+	}
+
+	$_POST['inadmin'] = $user->getinadmin();
+	$_POST['despassword'] = $user->getdespassword();
+	$_POST['deslogin'] = $_POST['desemail'];
+
+
+	$user->setData($_POST);
+
+	$user->update();
+
+	User::setSuccess("Dados alterados com sucesso");
+
+	header("Location: /curso1/ECommerce/index.php/profile");
+	exit;
+})
+
 ?>
