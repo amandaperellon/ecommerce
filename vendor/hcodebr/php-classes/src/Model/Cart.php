@@ -191,7 +191,7 @@ class Cart extends Model{
 				'nCdServico'=>'40010',
 				'sCepOrigem'=>'09853120',
 				'sCepDestino'=>$nrzipcode,
-				'sVlPeso'=>$totals['vlweight'],
+				'nVlPeso'=>$totals['vlweight'],
 				'nCdFormato'=>'1',
 				'nVlComprimento'=>$totals['vllength'],
 				'nVlAltura'=>$totals['vlheight'],
@@ -204,9 +204,9 @@ class Cart extends Model{
 
 
 
-			$xml = (array)simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?" . $qs);
+			$xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
 
-			$result = $xml->Servicos->cServicos;
+			$result = $xml->Servicos->cServico;
 
 			if($result->MsgErro != ''){
 
@@ -225,20 +225,14 @@ class Cart extends Model{
 
 			return $result;
 
-		}else{
-
-
-
 		}
-
-
 
 	}
 
 	public static function formatValueToDecimal($value):float{
 
-		$value = str_replace(".", "", $value);
-		return str_replace(",", ".", $value);
+		$value = str_replace('.', '', $value);
+		return str_replace(',', '.', $value);
 	}
 
 	public static function setMsgError($msg){
