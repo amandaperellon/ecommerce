@@ -8,12 +8,40 @@ $app->get("/admin/products", function(){
 
 	User::verifyLogin();
 
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
+
+	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+
+	if ($search != '') {
+		
+		$pagination = Products::getPageSearch($search, $page, 10);
+
+	}else{
+
+		$pagination = Products::getPage($page, 10);
+	}
+
+	$pages = [];
+
+	for ($x=0; $x < $pagination['pages']; $x++) { 
+		
+		array_push($pages, [
+			'href'=>'/curso1/ECommerce/index.php/admin/categories?'.http_build_query([
+				'page'=>$x+1,
+				'search'=>$search
+		]),
+		'text'=>$x+1
+		]);
+	}
+
 	$products = Products::listAll();
 
 	$page = new PageAdmin();
 
 	$page->setTpl("products", array(
-		"products"=>$products
+		"products"=>$pagination['data'],
+		"search"=>$search,
+		"pages"=>$pages
 	));
 });
 
