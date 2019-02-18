@@ -27,6 +27,8 @@ require_once("admin-products.php");
 
 require_once("functions.php");
 
+require_once("admin-orders.php");
+
 $app->run();
 
  ?>
