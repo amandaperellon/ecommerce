@@ -26,15 +26,13 @@ $app->get("/admin/products", function(){
 	for ($x=0; $x < $pagination['pages']; $x++) { 
 		
 		array_push($pages, [
-			'href'=>'/curso1/ECommerce/index.php/admin/categories?'.http_build_query([
+			'href'=>'/curso1/ECommerce/index.php/admin/products?'.http_build_query([
 				'page'=>$x+1,
 				'search'=>$search
 		]),
 		'text'=>$x+1
 		]);
 	}
-
-	$products = Products::listAll();
 
 	$page = new PageAdmin();
 
