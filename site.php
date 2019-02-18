@@ -133,7 +133,7 @@ $app->post('/cart/freight', function(){
 
 	$cart = Cart::getFromSession();
 
-	$cart->setfreight($_POST['zipcode']);
+	$cart->setFreight($_POST['zipcode']);
 
 	header("Location: /curso1/ECommerce/index.php/cart");
 	exit;
@@ -296,10 +296,14 @@ $app->post('/login', function(){
 
 $app->get('/logout', function(){ 
 
-	User::logout();
+    User::logout();
 
-	header("Location: /curso1/ECommerce/index.php/login");
-	exit;
+    Cart::removeFromSession();
+
+    session_regenerate_id();
+    
+    header("Location: /curso1/ECommerce/index.php/login");
+    exit;
 });
 
 $app->post("/register", function(){
