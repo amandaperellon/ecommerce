@@ -264,8 +264,15 @@ $app->post("/checkout", function(){
 
 	$order->save();
 
-	header("Location: /curso1/ECommerce/index.php/order/".$order->getidorder() . "/pagseguro");
-	exit;
+	switch ((int)$_POST['method-payment']) {
+		case 1:
+			header("Location: /curso1/ECommerce/index.php/order/".$order->getidorder() . "/pagseguro");
+			break;
+
+		case 2:
+			header("Location: /curso1/ECommerce/index.php/order/".$order->getidorder() . "/paypal");
+			break;
+	}
 
 });
 
@@ -292,6 +299,29 @@ $app->get("/order/:idorder/pagseguro", function($idorder){
 			'areaCode'=>substr($order->getnrphone(), 0,2),
 			'number'=>substr($order->getnrphone(), 2, strlen($order->getnrphone()))  //substr pega só os dois primeiros números (ddd) e o srtlen irá contar qnts numeros tem na string a partir do 2 para que o 'number' pega o resto do telefone sem o ddd
 		]
+	]);
+
+});
+
+$app->get("/order/:idorder/paypal", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header' => false,
+		'footer' => false
+	]);
+
+	$page->setTpl("payment-paypal", [
+		'order'=>$order->getValues(),
+		'products'=>$cart->getProducts(),
+		'cart'=>$cart->getValues(),
 	]);
 
 });
