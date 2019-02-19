@@ -264,8 +264,35 @@ $app->post("/checkout", function(){
 
 	$order->save();
 
-	header("Location: /curso1/ECommerce/index.php/order/".$order->getidorder());
+	header("Location: /curso1/ECommerce/index.php/order/".$order->getidorder() . "/pagseguro");
 	exit;
+
+});
+
+$app->get("/order/:idorder/pagseguro", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header' => false,
+		'footer' => false
+	]);
+
+	$page->setTpl("payment-pagseguro", [
+		'order'=>$order->getValues(),
+		'products'=>$cart->getProducts(),
+		'cart'=>$cart->getValues(),
+		'phone'=>[
+			'areaCode'=>substr($order->getnrphone(), 0,2),
+			'number'=>substr($order->getnrphone(), 2, strlen($order->getnrphone()))  //substr pega só os dois primeiros números (ddd) e o srtlen irá contar qnts numeros tem na string a partir do 2 para que o 'number' pega o resto do telefone sem o ddd
+		]
+	]);
 
 });
 
